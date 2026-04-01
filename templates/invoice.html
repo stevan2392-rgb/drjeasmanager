@@ -157,7 +157,7 @@ body{
       </div>
       <div class="bill-meta">
         <div class="row"><span>Factura No.</span> <span class="no" id="numFactura">{{ invoice.number }}</span></div>
-        <div class="row"><span>Fecha factura</span> <span id="fecFactura">{{ invoice.date.strftime("%d/%b/%Y").upper() }}</span></div>
+        <div class="row"><span>Fecha factura</span> <span id="fecFactura">{{ invoice.created_at.strftime("%d/%b/%Y").upper() }}</span></div>
 </div>
 </div>
   </header>
@@ -221,7 +221,7 @@ body{
   </section>
 
   <div class="obs" id="observaciones">
-    OBSERVACIONES: ESTA FACTURA DE VENTA SE ASIMILA EN TODOS SUS EFECTOS LEGALES A UNA LETRA DE CAMBIO SEGÚN ART. 774 DEL CÓDIGO DE COMERCIO.
+    OBSERVACIONES: {{ invoice.notes or "SIN OBSERVACIONES." }}
   </div>
 
   {% if not is_pdf %}
@@ -302,7 +302,7 @@ function setupShareLinks() {
   const invoiceData = {
     id: '{{ invoice.id }}',
     number: '{{ invoice.number }}',
-    date: '{{ invoice.date.strftime("%d/%b/%Y") }}',
+    date: '{{ invoice.created_at.strftime("%d/%b/%Y") }}',
     customer: '{{ invoice.customer.name }}',
     phone: '{{ invoice.customer.phone or "" }}',
     email: '{{ invoice.customer.email or "" }}',

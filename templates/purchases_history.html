@@ -16,8 +16,6 @@
             <th>Código</th>
             <th>Fecha</th>
             <th>Proveedor</th>
-            <th>Subtotal</th>
-            <th>IVA</th>
             <th>Total</th>
             <th>Notas</th>
             <th>Acciones</th>
@@ -25,7 +23,7 @@
         </thead>
         <tbody>
           <tr>
-            <td colspan="8" class="text-center">
+            <td colspan="6" class="text-center">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
@@ -49,7 +47,7 @@ async function loadPurchasesHistory() {
     if (purchases.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="8" class="text-center text-muted">
+          <td colspan="6" class="text-center text-muted">
             <i class="fas fa-inbox me-2"></i>No hay compras registradas
           </td>
         </tr>
@@ -64,8 +62,6 @@ async function loadPurchasesHistory() {
         <td><strong>${purchase.code}</strong></td>
         <td>${date.toLocaleDateString('es-CO')}</td>
         <td>${purchase.supplier.name}</td>
-        <td>${money(purchase.subtotal_excl_vat)}</td>
-        <td>${money(purchase.vat_total)}</td>
         <td><strong>${money(purchase.total)}</strong></td>
         <td>${purchase.notes || '-'}</td>
         <td>
@@ -81,7 +77,7 @@ async function loadPurchasesHistory() {
     const tbody = document.querySelector('#purchasesTable tbody');
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" class="text-center text-danger">
+        <td colspan="6" class="text-center text-danger">
           <i class="fas fa-exclamation-triangle me-2"></i>Error cargando datos
         </td>
       </tr>
@@ -157,7 +153,6 @@ async function loadPurchaseDetails(purchaseId) {
               <th>Producto</th>
               <th>Cantidad</th>
               <th>Costo Unit.</th>
-              <th>IVA</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -167,8 +162,7 @@ async function loadPurchaseDetails(purchaseId) {
                 <td>${item.product.sku} - ${item.product.name}</td>
                 <td>${item.quantity}</td>
                 <td>${money(item.unit_cost)}</td>
-                <td>${money(item.vat_amount)}</td>
-                <td>${money(item.total_incl_vat)}</td>
+                <td>${money(item.line_total)}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -179,8 +173,6 @@ async function loadPurchaseDetails(purchaseId) {
           <strong>Notas:</strong> ${purchase.notes || 'Sin notas'}
         </div>
         <div class="col-md-4 text-end">
-          <div><strong>Subtotal:</strong> ${money(purchase.subtotal_excl_vat)}</div>
-          <div><strong>IVA:</strong> ${money(purchase.vat_total)}</div>
           <div><strong>Total:</strong> ${money(purchase.total)}</div>
         </div>
       </div>

@@ -8,3 +8,4 @@ inventario.db
 .DS_Store
 .env
 TEMP_count_lines.txt
+.tools/

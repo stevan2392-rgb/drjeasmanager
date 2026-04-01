@@ -133,7 +133,7 @@ body{
       </div>
       <div class="bill-meta">
         <div class="row"><span>Remisión No.</span> <span class="no" id="numRemision">{{ remission.number }}</span></div>
-        <div class="row"><span>Fecha remisión</span> <span id="fecRemision">{{ remission.date.strftime("%d/%b/%Y").upper() }}</span></div>
+        <div class="row"><span>Fecha remisi&oacute;n</span> <span id="fecRemision">{{ remission.created_at.strftime("%d/%b/%Y").upper() }}</span></div>
       </div>
     </div>
   </header>
@@ -191,13 +191,15 @@ body{
     <div></div>
     <div class="box">
       <table>
-        <tr><td class="label">TOTAL A PAGAR</td><td class="num" id="totalPagar">${{ "%.0f"|format(total_to_pay) }}</td></tr>
+        <tr><td class="label">TOTAL</td><td class="num" id="totalPagar">${{ "%.0f"|format(total_to_pay) }}</td></tr>
+        <tr><td class="label">ABONO</td><td class="num">${{ "%.0f"|format(remission.paid_amount or 0) }}</td></tr>
+        <tr><td class="label">SALDO</td><td class="num">${{ "%.0f"|format(remission.balance_due or 0) }}</td></tr>
       </table>
     </div>
   </section>
 
   <div class="obs" id="observaciones">
-    OBSERVACIONES: ESTA REMISIÓN DE VENTA SE ASIMILA EN TODOS SUS EFECTOS LEGALES A UNA LETRA DE CAMBIO SEGÚN ART. 774 DEL CÓDIGO DE COMERCIO.
+    OBSERVACIONES: {{ remission.notes or "SIN OBSERVACIONES." }}{% if remission.payment_notes %} | NOTAS DE PAGO: {{ remission.payment_notes }}{% endif %} | ESTADO: {{ remission.status|upper }}
   </div>
 
   {% if not is_pdf %}
@@ -278,7 +280,7 @@ function setupShareLinks() {
   const remissionData = {
     id: '{{ remission.id }}',
     number: '{{ remission.number }}',
-    date: '{{ remission.date.strftime("%d/%b/%Y") }}',
+    date: '{{ remission.created_at.strftime("%d/%b/%Y") }}',
     customer: '{{ remission.customer.name }}',
     phone: '{{ remission.customer.phone or "" }}',
     email: '{{ remission.customer.email or "" }}',

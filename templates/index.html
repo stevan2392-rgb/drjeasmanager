@@ -63,16 +63,28 @@
             <input type="text" id="prodSKU" class="form-control" placeholder="SKU &uacute;nico">
           </div>
           <div class="col-6 col-md-4 col-xl-2">
-            <label class="form-label">Precio sin IVA</label>
+            <label class="form-label">Precio</label>
             <input type="number" id="prodPrice" class="form-control" step="0.01">
           </div>
           <div class="col-6 col-md-4 col-xl-2">
+            <label class="form-label">Cantidad inicial</label>
+            <input type="number" id="prodStock" class="form-control" value="0" min="0">
+          </div>
+          <div class="col-6 col-md-4 col-xl-1">
             <label class="form-label">Umbral bajo</label>
-            <input type="number" id="prodLow" class="form-control" value="5">
+            <input type="number" id="prodLow" class="form-control" value="5" min="0">
           </div>
-          <div class="col-12 col-md-4 col-xl-1 d-grid">
-            <button type="button" class="btn btn-primary" id="btnAddProduct">Crear</button>
+          <div class="col-12 col-md-4 col-xl-2">
+            <label class="form-label">Proveedor</label>
+            <input type="text" id="prodSupplier" class="form-control" placeholder="Opcional">
           </div>
+          <div class="col-12 col-md-4 col-xl-2 d-grid">
+            <button type="button" class="btn btn-primary" id="btnAddProduct">Guardar</button>
+          </div>
+        </div>
+        <input type="hidden" id="editingProductId" value="">
+        <div class="mt-3 d-none" id="editProductActions">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCancelEditProduct">Cancelar edición</button>
         </div>
       </div>
     </div>
@@ -114,9 +126,7 @@
               <tr>
                 <th>SKU</th>
                 <th>Producto</th>
-                <th>Precio sin IVA</th>
-                <th>IVA (pesos)</th>
-                <th>Precio con IVA</th>
+                <th>Precio</th>
                 <th>Proveedor</th>
                 <th>Vendidas</th>
                 <th>Stock</th>
@@ -173,7 +183,7 @@
         <div class="table-responsive">
           <table class="table table-sm table-striped align-middle mb-0" id="purchaseItems">
             <thead>
-              <tr><th>Producto</th><th>Cantidad</th><th>Costo unitario (sin IVA)</th><th>IVA</th><th></th></tr>
+              <tr><th>Producto</th><th>Cantidad</th><th>Costo unitario</th><th></th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -223,7 +233,7 @@
         <div class="table-responsive">
           <table class="table table-sm align-middle mb-0" id="remissionItems">
             <thead>
-              <tr><th>Producto</th><th>Cantidad</th><th>Precio unitario (sin IVA)</th><th>IVA</th><th></th></tr>
+              <tr><th>Producto</th><th>Cantidad</th><th>Precio unitario</th><th></th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -243,6 +253,14 @@
           <div class="col-12 col-lg-4">
             <label class="form-label">D&iacute;as para mantenimiento</label>
             <input type="number" id="remMaintenanceDays" class="form-control" placeholder="Opcional, ej. 180">
+          </div>
+          <div class="col-12 col-lg-4">
+            <label class="form-label">Abono</label>
+            <input type="number" id="remPaidAmount" class="form-control" value="0" min="0" step="0.01">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Observaciones</label>
+            <textarea id="remNotes" class="form-control" rows="2" placeholder="Observaciones de la remisi&oacute;n"></textarea>
           </div>
           <div class="col-12 col-lg-4 d-grid">
             <button type="button" class="btn btn-primary" id="btnSaveRemission">Generar remisi&oacute;n</button>
@@ -289,7 +307,7 @@
         <div class="table-responsive">
           <table class="table table-sm align-middle mb-0" id="invoiceItems">
             <thead>
-              <tr><th>Producto</th><th>Cantidad</th><th>Precio unitario (sin IVA)</th><th>IVA</th><th></th></tr>
+              <tr><th>Producto</th><th>Cantidad</th><th>Precio unitario</th><th></th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -310,6 +328,10 @@
             <label class="form-label">D&iacute;as para mantenimiento</label>
             <input type="number" id="invMaintenanceDays" class="form-control" placeholder="Opcional, ej. 180">
           </div>
+          <div class="col-12">
+            <label class="form-label">Observaciones</label>
+            <textarea id="invNotes" class="form-control" rows="2" placeholder="Observaciones de la factura"></textarea>
+          </div>
           <div class="col-12 col-lg-4 d-grid">
             <button type="button" class="btn btn-success" id="btnSaveInvoice">Generar factura</button>
           </div>
@@ -317,10 +339,13 @@
       </div>
     </div>
     <div class="mt-3" id="invoiceResult"></div>
-    <div class="mt-3">
+    <div class="mt-3 d-flex flex-wrap gap-2">
       <a href="/history/invoices" class="btn btn-outline-info">
         <i class="fas fa-history me-1"></i>Ver historial de facturas
       </a>
+      <button type="button" class="btn btn-outline-success" id="btnDownloadSalesReport">
+        <i class="fas fa-file-download me-1"></i>Descargar informe de ventas
+      </button>
     </div>
   </div>
 

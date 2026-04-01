@@ -16,15 +16,13 @@
             <th>Número</th>
             <th>Fecha</th>
             <th>Cliente</th>
-            <th>Subtotal</th>
-            <th>IVA</th>
             <th>Total</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td colspan="7" class="text-center">
+            <td colspan="5" class="text-center">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
@@ -48,7 +46,7 @@ async function loadInvoicesHistory() {
     if (invoices.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center text-muted">
+          <td colspan="5" class="text-center text-muted">
             <i class="fas fa-inbox me-2"></i>No hay facturas registradas
           </td>
         </tr>
@@ -63,8 +61,6 @@ async function loadInvoicesHistory() {
         <td><strong>${invoice.number}</strong></td>
         <td>${date.toLocaleDateString('es-CO')}</td>
         <td>${invoice.customer.name}</td>
-        <td>${money(invoice.subtotal_excl_vat)}</td>
-        <td>${money(invoice.vat_total)}</td>
         <td><strong>${money(invoice.total)}</strong></td>
         <td>
           <a href="/invoice/${invoice.id}" target="_blank" class="btn btn-sm btn-outline-primary">
@@ -79,7 +75,7 @@ async function loadInvoicesHistory() {
     const tbody = document.querySelector('#invoicesTable tbody');
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="text-center text-danger">
+        <td colspan="5" class="text-center text-danger">
           <i class="fas fa-exclamation-triangle me-2"></i>Error cargando datos
         </td>
       </tr>

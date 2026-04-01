@@ -16,15 +16,16 @@
             <th>Número</th>
             <th>Fecha</th>
             <th>Cliente</th>
-            <th>Subtotal</th>
-            <th>IVA</th>
             <th>Total</th>
+            <th>Abono</th>
+            <th>Saldo</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td colspan="7" class="text-center">
+            <td colspan="8" class="text-center">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
@@ -48,7 +49,7 @@ async function loadRemissionsHistory() {
     if (remissions.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center text-muted">
+          <td colspan="8" class="text-center text-muted">
             <i class="fas fa-inbox me-2"></i>No hay remisiones registradas
           </td>
         </tr>
@@ -63,9 +64,10 @@ async function loadRemissionsHistory() {
         <td><strong>${remission.number}</strong></td>
         <td>${date.toLocaleDateString('es-CO')}</td>
         <td>${remission.customer.name}</td>
-        <td>${money(remission.subtotal_excl_vat)}</td>
-        <td>${money(remission.vat_total)}</td>
         <td><strong>${money(remission.total)}</strong></td>
+        <td>${money(remission.paid_amount)}</td>
+        <td>${money(remission.balance_due)}</td>
+        <td>${remission.status}</td>
         <td>
           <a href="/remission/${remission.id}" target="_blank" class="btn btn-sm btn-outline-primary">
             <i class="fas fa-eye me-1"></i>Ver
@@ -79,7 +81,7 @@ async function loadRemissionsHistory() {
     const tbody = document.querySelector('#remissionsTable tbody');
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="text-center text-danger">
+        <td colspan="8" class="text-center text-danger">
           <i class="fas fa-exclamation-triangle me-2"></i>Error cargando datos
         </td>
       </tr>
