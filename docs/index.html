@@ -65,6 +65,12 @@
 <body>
   <section class="hero">
     <p class="text-uppercase text-primary fw-semibold mb-2">Inventarios Ciclo Variedades Sisi</p>
+    <div class="alert alert-warning d-inline-block text-start mt-2 mb-4" role="alert" style="max-width: 840px;">
+      <strong>Importante:</strong> esta versi&oacute;n publicada en <code>docs/</code> es solo informativa y
+      <strong>no guarda datos</strong>. Si ingresas productos aqu&iacute; o en GitHub Pages, al cerrar la p&aacute;gina no se conservar&aacute;n.
+      Para que el inventario, las remisiones y las facturas se guarden, debes abrir la aplicaci&oacute;n Flask real ejecutando
+      <code>app.py</code> o usando <code>iniciar.bat</code>.
+    </div>
     <h1>Panel integral para administrar inventario, compras, facturas y mantenimientos</h1>
     <p>
       Este repositorio contiene una aplicación Flask + SQLite con la que el taller puede controlar existencias,
@@ -154,10 +160,8 @@
           <div class="col-12 col-lg-6">
             <h4 class="fs-5">Ejecución local (desarrollo)</h4>
             <div class="code-block">
-              python -m venv .venv<br>
-              .\.venv\Scripts\activate<br>
-              python -m pip install -r requirements.txt<br>
-              set FLASK_APP=app.py<br>
+              iniciar.bat<br><br>
+              o desde terminal:<br>
               python app.py
             </div>
           </div>
