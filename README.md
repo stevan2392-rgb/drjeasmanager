@@ -78,7 +78,26 @@ Este repo incluye un `render.yaml` listo para usar con **Render Blueprints**:
 
 > Render usa `runtime.txt` para conocer la versión de Python y respeta `DATABASE_PATH`, por lo que no necesitas tocar el código para cambiar la ubicación de la base de datos.
 
-### 3. Otros proveedores (Railway, Fly.io, etc.)
+### 3. Backend completo en Railway
+
+Railway puede desplegar este repo directamente desde GitHub usando el `Procfile`.
+
+1. Entra a [Railway](https://railway.com/) y crea un proyecto nuevo.
+2. Elige **Deploy from GitHub repo** y selecciona este repositorio.
+3. Railway detectarÃ¡ Python y usarÃ¡ este comando de inicio:  
+   `gunicorn app:app --bind 0.0.0.0:${PORT:-8000}`
+4. Dentro del servicio crea un **Volume** y mÃ³ntalo, por ejemplo, en `/data`.
+5. En variables de entorno define:
+   - `DATABASE_PATH=/data/inventario.db`
+   - `FLASK_ENV=production`
+6. Si vas a usar correo o WhatsApp, agrega tambiÃ©n tus variables `SMTP_*` y `TWILIO_*`.
+7. Usa `/health` como healthcheck.
+
+> Railway usa un sistema de archivos efÃ­mero por defecto. Si no montas un Volume o no apuntas `DATABASE_PATH` al volumen, la base SQLite se puede perder al reiniciar o redeployar.
+
+La app tambiÃ©n detecta `RAILWAY_VOLUME_MOUNT_PATH` automÃ¡ticamente si Railway lo expone y no definiste `DATABASE_PATH`.
+
+### 4. Otros proveedores (Fly.io, etc.)
 
 El `Procfile` contiene `web: gunicorn app:app --bind 0.0.0.0:${PORT:-8000}`.  
 Para otros hosts repite la configuración:

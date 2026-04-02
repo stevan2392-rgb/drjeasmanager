@@ -18,12 +18,26 @@ def utcnow():
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_DB_PATH = os.path.join(BASE_DIR, "inventario.db")
-DATABASE_PATH = os.path.abspath(os.getenv("DATABASE_PATH", DEFAULT_DB_PATH))
-os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
-SQLITE_URI_PATH = Path(DATABASE_PATH).as_posix()
+RAILWAY_VOLUME_MOUNT_PATH = os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+else:
+    if os.getenv("DATABASE_PATH"):
+        DATABASE_PATH = os.path.abspath(os.getenv("DATABASE_PATH"))
+    elif RAILWAY_VOLUME_MOUNT_PATH:
+        DATABASE_PATH = os.path.join(RAILWAY_VOLUME_MOUNT_PATH, "inventario.db")
+    else:
+        DATABASE_PATH = DEFAULT_DB_PATH
+
+    DATABASE_PATH = os.path.abspath(DATABASE_PATH)
+    os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
+    SQLITE_URI_PATH = Path(DATABASE_PATH).as_posix()
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{SQLITE_URI_PATH}"
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{SQLITE_URI_PATH}"
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["JSON_SORT_KEYS"] = False
 
@@ -569,6 +583,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
 @app.route("/history/purchases")
 def purchases_history():
     return render_template("purchases_history.html")
@@ -1032,4 +1051,4 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
